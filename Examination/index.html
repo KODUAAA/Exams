@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Dream Villa VR - Optimized</title>
+
+<script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/aframe-physics-system@4.0.1/dist/aframe-physics-system.min.js"></script>
+
+<style>
+body { margin:0; }
+button {
+  position:absolute;
+  top:20px;
+  left:20px;
+  padding:10px 15px;
+  font-size:16px;
+  z-index:999;
+}
+</style>
+</head>
+
+<body>
+
+<button onclick="toggleDayNight()">🌙 Toggle Day/Night</button>
+
+
+
+
+<a-scene shadow="type:pcfsoft" background="color:#87CEEB">
+ 
+  <a-assets>
+
+    <!-- MODELS -->
+    <a-asset-item id="tvModel" src="assets/models/tvsmall.glb"></a-asset-item>
+    <a-asset-item id="bedModel" src="assets/models/bed22.glb"></a-asset-item>
+    <a-asset-item id="wardrobeModel" src="assets/models/wadrobe.glb"></a-asset-item>
+    <a-asset-item id="carModel" src="assets/models/Camara2.glb"></a-asset-item>
+    <a-asset-item id="treeModel" src="assets/models/Big Tree.glb"></a-asset-item>
+    <a-asset-item id="armchairModel" src="assets/models/Armchair11.glb"></a-asset-item>
+    <a-asset-item id="couchModel" src="assets/models/couch.glb"></a-asset-item>
+    <a-asset-item id="kitchenModel" src="assets/models/kitt.glb"></a-asset-item>
+    <a-asset-item id="gateModel" src="assets/models/gate.glb"></a-asset-item>
+    <a-asset-item id="chandelierModel" src="assets/models/Light Chandelier.glb"></a-asset-item>
+    <a-asset-item id="acModel" src="assets/models/Air conditioner.glb"></a-asset-item>
+    <a-asset-item id="beachModel" src="assets/models/beach ball.glb"></a-asset-item>
+    <a-asset-item id="guardModel" src="assets/models/SWAT.glb"></a-asset-item>
+    <a-asset-item id="dogModel" src="assets/models/Pug.glb"></a-asset-item>
+    <a-asset-item id="tableModel" src="assets/models/CoffeeTable.glb"></a-asset-item>
+
+
+
+
+
+
+    <!--textures-->
+    <img id="wallTex" src="assets/textures/grey.jpg">
+    <img id="floorTex" src="assets/textures/brick11.jpg">
+    <img id="roofTex" src="assets/textures/floor.jpg">
+    <img id="woodTex" src="assets/textures/rosewood.jpg">
+    <img id="roadTex" src="assets/textures/laminate.jpg">
+    <img id="groundTex" src="assets/textures/brick11.jpg">
+  
+  
+
+
+
+
+
+
+    
+
+
+
+  </a-assets>
+
+  
+
+<!-- CAMERA -->
+<!-- PLAYER RIG -->
+<a-entity id="groundRig" position="0 1.6 18">
+  <a-camera 
+    wasd-controls="acceleration: 40"
+    look-controls="pointerLockEnabled: true">
+  </a-camera>
+</a-entity>
+
+<!-- AERIAL CAMERA -->
+<a-entity id="aerialCam" camera position="0 35 0" rotation="-90 0 0" visible="false"></a-entity>
+
+
+<!-- LIGHTING -->
+<a-light id="sun" type="directional"
+intensity="1"
+position="5 15 10"
+castShadow="true"></a-light>
+
+<a-light id="ambient"
+type="ambient"
+intensity="0.6"></a-light>
+
+<a-sky id="sky" color="#87CEEB"></a-sky>
+
+<!-- GROUND -->
+<a-plane rotation="-90 0 0"
+width="100"
+height="100"
+src="#groundTex"></a-plane>
+
+<!-- VILLA BASE -->
+<a-box position="0 0.1 0"
+width="20"
+height="0.2"
+depth="15"
+src="#roadTex"></a-box>
+
+<!--Chandelier-->
+<a-entity
+gltf-model="#chandelierModel"
+position="0 9 5"
+scale="1 1 1">
+
+<a-light
+type="point"
+intensity="1.5"
+distance="20"
+color="#fff2cc">
+</a-light>
+
+</a-entity>
+<!--AC-->
+<a-entity
+gltf-model="#acModel"
+position="-7 5.5 -7.12"
+rotation="0 360 0"
+scale="0.0025 0.0025 0.0025">
+</a-entity>
+
+
+
+<!-- OUTSIDE -->
+
+<!-- MOVING BEACH BALL -->
+<a-entity gltf-model="#beachModel"
+          position="-5 0.5 16"
+          rotation="0 0 0"
+          scale="1.5 1.5 1.5"
+          animation="
+            property: position;
+            to: -2 0.5 14;
+            dur: 3500;
+            dir: alternate;
+            loop: true">
+</a-entity>
+
+<!-- SECURITY GUARD PATROL -->
+<a-entity id="guard1"
+          gltf-model="#guardModel"
+          position="0 0 22"
+          scale="1.8 1.8 1.8"
+          animation="property: position;
+                     from: 0 0 22;
+                     to: 20 0 22;
+                     dur: 9000;
+                     dir: alternate;
+                     loop: true">
+</a-entity>
+
+<a-entity id="guard2"
+          gltf-model="#guardModel"
+          position="20 0 35"
+          scale="1.8 1.8 1.8"
+          animation="property: position;
+                     from: 30 0 35;
+                     to: 0 0 35;
+                     dur: 8000;
+                     dir: alternate;
+                     loop: true">
+</a-entity>
+
+
+<!-- WALKING DOG -->
+<a-entity id="dog"
+          gltf-model="#dogModel"
+          position="-5 0.5 14"
+          scale="0.7 0.7 0.7"
+          animation="
+            property: position;
+            to: -2 0.5 14;
+            dur: 5500;
+            dir: alternate;
+            loop: true">
+</a-entity>
+
+<!-- TREE -->
+<a-entity gltf-model="#treeModel"
+          position="12 3.4 18"
+          rotation="0 45 0"
+          scale="2 2 2">
+</a-entity>
+
+<a-entity gltf-model="#treeModel"
+          position="-12 3.4 -18"
+          rotation="0 45 0"
+          scale="2 2 2">
+</a-entity>
+
+<a-entity gltf-model="#treeModel"
+          position="-9 3.4 15"
+          rotation="0 45 0"
+          scale="2 2 2">
+</a-entity>
+
+<a-entity gltf-model="#treeModel"
+          position="19 3.4 15"
+          rotation="0 45 0"
+          scale="2 2 2">
+</a-entity>
+
+<a-entity gltf-model="#treeModel"
+          position="-15 3.4 15"
+          rotation="0 45 0"
+          scale="2 2 2">
+</a-entity>
+
+<a-entity gltf-model="#treeModel"
+          position="12 3.4 18"
+          rotation="0 45 0"
+          scale="2 2 2">
+</a-entity>
+
+<!-- LEFT ROOF -->
+<a-box position="0 11 -3.9"
+       width="21"
+       height="0.4"
+       depth="8"
+       rotation="-15 0 0"
+       src="#roofTex">
+</a-box>
+
+<!-- RIGHT ROOF -->
+<a-box position="0 11 3.9"
+       width="21"
+       height="0.4"
+       depth="8"
+       rotation="15 0 0"
+       src="#roofTex">
+</a-box>
+
+<!-- WALLS -->
+<a-box position="-10 2.5 0"
+width="0.3"
+height="15"
+depth="15"
+src=#wallTex></a-box>
+
+<a-box position="10 2.5 0"
+width="0.3"
+height="15"
+depth="15"
+src=#wallTex></a-box>
+
+<a-box position="0 2.5 -7.5"
+width="20"
+height="15"
+depth="0.3"
+src=#wallTex></a-box></a-box>
+
+<a-box position="0 2.5 7.5"
+width="8"
+height="15"
+depth="0.3"
+src=#wallTex material="side:back">
+</a-box></a-box>
+
+<!-- INTERIOR WALLS -->
+
+<!-- LIVING ROOM -->
+<<!-- LIVING ROOM (BACK CENTER) -->
+
+<!-- TV -->
+<a-entity gltf-model="#tvModel"
+          position="-9.6 1 3.49"
+          rotation="0 90 0"
+          scale="0.8 0.8 0.8"></a-entity>
+
+
+
+
+<!-- LIVING TO BEDROOM + KITCHEN PARTITION -->
+<!-- ============================= -->
+
+<!-- LEFT WALL SEGMENT -->
+<a-box position="-8 2.5 0"
+       width="4"
+       height="7"
+       depth="0.3"
+       src="#woodTex">
+</a-box>
+
+
+<!-- RIGHT WALL SEGMENT -->
+<a-box position="8 2.5 0"
+       width="4"
+       height="7"
+       depth="0.3"
+       src="#woodTex">
+</a-box>
+
+<!-- GLASS OPENING TO BEDROOM -->
+<a-box position="-4 2.5 0"
+       width="8"
+       height="4"
+       depth="0.1"
+       material="color:#aee6ff;
+                 opacity:0.4;
+                 transparent:true;
+                 metalness:0.6;
+                 roughness:0.05;
+                 side:double">
+</a-box>
+
+<!-- GLASS OPENING TO KITCHEN -->
+<a-box position="4 2.5 0"
+       width="8"
+       height="4"
+       depth="0.1"
+       material="color:#aee6ff;
+                 opacity:0.4;
+                 transparent:true;
+                 metalness:0.6;
+                 roughness:0.05;
+                 side:double">
+</a-box>
+
+<!-- KITCHEN -->
+<!-- KITCHEN MODEL -->
+<a-entity
+    gltf-model="#kitchenModel"
+    position="8.2 2.2 -3.9"
+    rotation="0 270 0"
+    scale="1.3 1.3 1.3">
+</a-entity>
+
+<!-- BEDROOM -->
+<!-- Bed -->
+<a-entity gltf-model="#bedModel"
+          position="-7.7 0 -6.5"
+          rotation="0 90 0"
+          scale="1 1 1"></a-entity>
+
+<!-- Wardrobe -->
+<a-entity gltf-model="#wardrobeModel"
+          position="-2.8 1.6 -6"
+          rotation="0 360 0"
+          scale="1.2 1.2 1.2"></a-entity>
+
+<!-- BEDROOM ARMCHAIR -->
+<a-entity gltf-model="#armchairModel"
+          position="-2 0 -2"
+          rotation="0 270 0"
+          scale="0.7 0.7 0.7">
+</a-entity>
+
+<!-- BEDROOM (FRONT LEFT) -->
+<a-box position="-9.5 2 -2"
+width="0.2"
+height="2"
+depth="3"
+color="black"></a-box>
+
+<!-- PARTITION BETWEEN BEDROOM & KITCHEN -->
+<a-box position="0 3.0 -3.0"
+       width="0.2"
+       height="5"
+       depth="7"
+       color="#dddddd">
+</a-box>
+
+<!--LEFT GLASS DOOR -->
+    <a-box position="-6.8 2.0 7.5"
+        width="5.9"
+        height="16"
+        depth="0.3"
+        color="#aee6ff"
+        opacity="0.79"
+        transparent="true"
+        metalness="0.3"
+        roughness="0.05">
+    </a-box>    
+
+
+<!-- HINGE PIVOT (left side hinge) -->
+<a-entity id="bigDoorPivot" position="4 0 7.4">
+
+    <!-- DOOR FRAME -->
+    <a-box position="3 2 0"
+           width="6"
+           height="16"
+           depth="0.3"
+           material="color:#aee6ff;
+                     opacity:0.6;
+                     transparent:true;
+                     metalness:0.5;
+                     roughness:0.05;
+                     side:double">
+    </a-box>
+
+    <!-- HANDLE -->
+    <a-cylinder id="doorHandle"
+                position="5.2 3 0.25"
+                radius="0.08"
+                height="1.8"
+                color="#444">
+    </a-cylinder>
+
+</a-entity>
+ 
+<!-- ================== MODELS ================== -->
+
+
+<!-- LIVING ROOM COUCH -->
+<a-entity gltf-model="#couchModel"
+          position="1 0 4.6"
+          rotation="0 270 0"
+          scale="0.8 0.8 0.8">
+</a-entity>
+<!-- LIVING ROOM table -->
+<a-entity gltf-model="#tableModel"
+          position="-3.2 0.8 5.2"
+          rotation="0 270 0"
+          scale="1.5 1.5 1.5">
+</a-entity>
+
+
+<!-- SUPERCAR -->
+<a-entity gltf-model="#carModel"
+ position="7 1 18"
+ rotation="0 90 0"
+ scale="0.8 0.8 0.8">
+</a-entity>
+
+
+
+<!-- POOL -->
+<a-box position="20 0.2 3"
+width="15"
+height="0.4"
+depth="5"
+color="#1e3f66"></a-box>
+
+<a-plane id="water"
+rotation="-90 0 0"
+width="14.8"
+height="5.8"
+position="20 0.6 3"
+color="#4FC3F7"
+opacity="0.85"
+water-wave>
+</a-plane>
+
+<!-- COMPOUND WALL -->
+
+<!-- BACK WALL -->
+<a-box position="0 2.5 -30"
+       width="60"
+       height="8"
+       depth="0.5"
+       src="#floorTex">
+</a-box>
+
+<!-- FRONT WALL (with gate gap) -->
+<a-box position="-18 2.5 30"
+       width="24"
+       height="8"
+       depth="0.5"
+      src="#floorTex">
+</a-box>
+
+<a-box position="18 2.5 30"
+       width="24"
+       height="8"
+       depth="0.5"
+       src="#floorTex">
+</a-box>
+
+<!-- LEFT WALL -->
+<a-box position="-30 3 0"
+       width="0.5"
+       height="8"
+       depth="60"
+       src="#floorTex">
+</a-box>
+
+<!-- RIGHT WALL -->
+<a-box position="30 3 0"
+       width="0.5"
+       height="8"
+       depth="60"
+       src="#floorTex">
+</a-box>
+
+<!--main gate-->
+<a-entity id="gatePivot" position="2.2 0 25.7" >
+  <a-entity
+      id="mainGate"
+      gltf-model="#gateModel"
+      rotation="0 270 0"
+      scale="0.024 0.024 0.024">
+  </a-entity>
+
+</a-entity>
+
+
+
+
+
+
+
+</a-scene>
+
+<script>
+
+AFRAME.registerComponent('water-wave', {
+  tick: function (time) {
+    this.el.object3D.position.y =
+      0.6 + Math.sin(time / 400) * 0.05;
+  }
+});
+
+document.querySelector('#water')
+  .setAttribute('water-wave','');
+
+let isNight = false;
+
+function toggleDayNight() {
+  const sky = document.getElementById('sky');
+  const sun = document.getElementById('sun');
+  const ambient = document.getElementById('ambient');
+
+  if (!isNight) {
+    sky.setAttribute('color','#0b1d3a');
+    sun.setAttribute('intensity',0.3);
+    ambient.setAttribute('intensity',0.3);
+  } else {
+    sky.setAttribute('color','#87CEEB');
+    sun.setAttribute('intensity',1);
+    ambient.setAttribute('intensity',0.6);
+  }
+
+  isNight = !isNight;
+}
+let aerialActive = false;
+
+document.addEventListener('keydown', function(event) {
+  if (event.key.toLowerCase() === 't') {
+
+    const groundRig = document.getElementById('groundRig');
+    const aerialCam = document.getElementById('aerialCam');
+
+    if (!aerialActive) {
+      groundRig.setAttribute('visible', false);
+      aerialCam.setAttribute('visible', true);
+      aerialCam.setAttribute('camera', 'active', true);
+      aerialActive = true;
+    } else {
+      groundRig.setAttribute('visible', true);
+      aerialCam.setAttribute('visible', false);
+      groundRig.querySelector('a-camera')
+               .setAttribute('camera', 'active', true);
+      aerialActive = false;
+    }
+  }
+});
+
+
+
+</script>
+
+</body>
+</html>
