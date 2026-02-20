@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>DreamVilla</title>
+<title>Dream Villa VR - Optimized</title>
 
 <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/aframe-physics-system@4.0.1/dist/aframe-physics-system.min.js"></script>
@@ -826,62 +826,65 @@ height="8">
 
 <script>
 
-AFRAME.registerComponent('water-wave', {
-  tick: function (time) {
-    this.el.object3D.position.y =
-      0.6 + Math.sin(time / 400) * 0.05;
-  }
-});
+// Wait until A-Frame scene is fully loaded
+window.addEventListener("load", function () {
 
-document.querySelector('#water')
-  .setAttribute('water-wave','');
 
-let isNight = false;
+  // ===== DAY / NIGHT =====
+  window.isNight = false;
 
-function toggleDayNight() {
-  const sky = document.getElementById('sky');
-  const sun = document.getElementById('sun');
-  const ambient = document.getElementById('ambient');
+  window.toggleDayNight = function () {
+    const sky = document.getElementById('sky');
+    const sun = document.getElementById('sun');
+    const ambient = document.getElementById('ambient');
 
-  if (!isNight) {
-    sky.setAttribute('color','#0b1d3a');
-    sun.setAttribute('intensity',0.3);
-    ambient.setAttribute('intensity',0.3);
-  } else {
-    sky.setAttribute('color','#87CEEB');
-    sun.setAttribute('intensity',1);
-    ambient.setAttribute('intensity',0.6);
-  }
+    if (!sky || !sun || !ambient) return;
 
-  isNight = !isNight;
-}
-let aerialActive = false;
-
-document.addEventListener('keydown', function(event) {
-  if (event.key.toLowerCase() === 't') {
-
-    const groundRig = document.getElementById('groundRig');
-    const aerialCam = document.getElementById('aerialCam');
-
-    if (!aerialActive) {
-      groundRig.setAttribute('visible', false);
-      aerialCam.setAttribute('visible', true);
-      aerialCam.setAttribute('camera', 'active', true);
-      aerialActive = true;
+    if (!isNight) {
+      sky.setAttribute('color','#0b1d3a');
+      sun.setAttribute('intensity',0.3);
+      ambient.setAttribute('intensity',0.3);
     } else {
-      groundRig.setAttribute('visible', true);
-      aerialCam.setAttribute('visible', false);
-      groundRig.querySelector('a-camera')
-               .setAttribute('camera', 'active', true);
-      aerialActive = false;
+      sky.setAttribute('color','#87CEEB');
+      sun.setAttribute('intensity',1);
+      ambient.setAttribute('intensity',0.6);
     }
-  }
-  
 
-  
-
+    isNight = !isNight;
+  };
 
 
+  // ===== AERIAL CAMERA =====
+  let aerialActive = false;
+
+  document.addEventListener('keydown', function(event) {
+
+    if (event.key.toLowerCase() === 't') {
+
+      const groundRig = document.getElementById('groundRig');
+      const aerialCam = document.getElementById('aerialCam');
+
+      if (!groundRig || !aerialCam) return;
+
+      if (!aerialActive) {
+        groundRig.setAttribute('visible', false);
+        aerialCam.setAttribute('visible', true);
+        aerialCam.setAttribute('camera', 'active', true);
+        aerialActive = true;
+
+      } else {
+        groundRig.setAttribute('visible', true);
+        aerialCam.setAttribute('visible', false);
+
+        const cam = groundRig.querySelector('[camera]');
+        if (cam) cam.setAttribute('camera', 'active', true);
+
+        aerialActive = false;
+      }
+    }
+  });
+
+});
 </script>
 
 </body>
